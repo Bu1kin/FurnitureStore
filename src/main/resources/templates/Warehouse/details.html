@@ -30,8 +30,8 @@
 
             <div class="input-field col s12">
                 <select required id="select-employee">
-                    <div th:each="el : ${employeeArrayList}">
-                        <option th:text="${el.id} + ' ' + ${el.getSurname()} + ' ' + ${el.getName()} + ' ' + ${el.getMiddleName()}"></option>
+                    <div th:each="el1 : ${el.getEmployee()}">
+                        <option th:text="${el1.id} + ' ' + ${el1.getSurname()} + ' ' + ${el1.getName()} + ' ' + ${el1.getMiddleName()}"></option>
                     </div>
                 </select>
                 <label>Кладовщик</label>
