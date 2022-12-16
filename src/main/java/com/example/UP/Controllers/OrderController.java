@@ -5,6 +5,7 @@ import com.example.UP.Repositories.ClientRepo;
 import com.example.UP.Repositories.EmployeeRepo;
 import com.example.UP.Repositories.OrderRepo;
 import com.example.UP.Repositories.ProductRepo;
+import com.example.UP.Services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 //@PreAuthorize("hasAnyAuthority('ADMIN', 'CASHIER')")
@@ -28,6 +30,9 @@ public class OrderController {
     EmployeeRepo employeeRepo;
     @Autowired
     ProductRepo productRepo;
+
+    @Autowired
+    OrderService orderService;
 
     @GetMapping("/order")
     public String main(Model model){
@@ -86,5 +91,17 @@ public class OrderController {
     public String orderDelete(@PathVariable Long id) {
         orderRepo.deleteById(id);
         return("redirect:/order");
+    }
+
+    @GetMapping("/order/stats")
+    public String stats(Model model){
+        List<String> productName = orderService.getAllOrders().stream().map(x->x.getProduct().getNameProduct()).collect(Collectors.toList());
+        List<Double> productCost = orderService.getAllOrders().stream().map(x->x.getProduct().getPrice()).collect(Collectors.toList());
+        List<Integer> productAmount = orderService.getAllOrders().stream().map(x->x.getProduct().getAmount()).collect(Collectors.toList());
+
+        model.addAttribute("productName", productName);
+        model.addAttribute("productCost", productCost);
+        model.addAttribute("productAmount", productAmount);
+        return "/Order/stats";
     }
 }
