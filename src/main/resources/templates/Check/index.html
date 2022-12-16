@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Чеки</title>
+    <div th:insert="fragments/tailwindNavbar"></div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</head>
+<body class="bg-gradient-to-r from-white via-gray-50 to-yellow-50">
+    <form class="col s12" action="/check/filter-direct" method="get">
+        <div class="input-field col s12 ml-5" style="margin-bottom: 0px;">
+            <i class="material-icons prefix">search</i>
+            <input type="text" name="searchName" placeholder="Дата печати" style="min-width: 100px; width: 250px; margin-bottom: 0px;">
+            <input class="btn blue" type="submit" value="Найти" style="width: 80px; margin-left: 10px">
+
+            <a class="right btn waves-effect waves-light mr-5 green accent-3 black-text modal-trigger" href="#modal1" style="margin-top: 7px;">Добавить чек</a>
+        </div>
+    </form>
+
+    <!-- Модальное окно добавления данных (materialize css) -->
+    <div id="modal1" class="modal modal-fixed-footer">
+        <div class="modal-content">
+            <p class="center" style="font-size: 32px">Добавление чека</p>
+            <div class="row">
+                <form th:object="${check}" th:action="'/check/add'" method="post">
+                    <div class="input-field col s12">
+                        <select required name="order">
+                            <div th:each="el : ${orderArrayList}">
+                                <option th:text="${el.id}"></option>
+                            </div>
+                        </select>
+                        <label>Выберите заказ</label>
+                    </div>
+
+                    <div class=" input-field col s12">
+                        <input required id="dateOfRelease" class="validate" type="text" name="dateOfRelease" pattern="[0-1][0-9][/][0-3][0-9][/][1-2][0-9][0-9][0-9]">
+                        <label for="dateOfRelease">Дата печати (ММ/ДД/ГГГГ)</label>
+                    </div>
+
+                    <div class="input-field col s12">
+                        <select required name="employee">
+                            <div th:each="el : ${listEmployee}">
+                                <option th:text="${el.id} + ' ' + ${el.getSurname()} + ' ' + ${el.getName()} + ' ' + ${el.getMiddleName()}"></option>
+                            </div>
+                        </select>
+                        <label>Выберите сотрудника</label>
+                    </div>
+
+                    <div class="input-field col s12">
+                        <select required name="client">
+                            <div th:each="el : ${listClient}">
+                                <option th:text="${el.id} + ' ' + ${el.getSurname()} + ' ' + ${el.getName()} + ' ' + ${el.getMiddleName()}"></option>
+                            </div>
+                        </select>
+                        <label>Выберите клиента</label>
+                    </div>
+
+                    <div class="input-field col s12">
+                        <select required name="register">
+                            <div th:each="el : ${listRegister}">
+                                <option th:text="${el.id}"></option>
+                            </div>
+                        </select>
+                        <label>Выберите кассовый аппарат</label>
+                    </div>
+
+                    <div class=" input-field col s12">
+                        <input disabled required id="totalCost" class="validate" type="text" name="totalCost">
+                        <label for="totalCost">Итоговая сумма</label>
+                    </div>
+
+                    <input type="submit" value="Создать" class="waves-effect waves-green btn green accent-3 black-text"/>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Закрыть</a>
+        </div>
+    </div>
+
+
+    <div class="cover-container p-5 flex-column">
+        <div style="background-color: #e7e7e0" class="rounded-xl shadow-xl">
+            <table class="highlight">
+                <thead>
+                <tr>
+                    <th class="pl-5" style="width: 70px">ID</th>
+                    <th>№ заказа</th>
+                    <th>Дата печати</th>
+                    <th>Клиент</th>
+                    <th>Сотрудник</th>
+                    <th>№ Кассового аппарата</th>
+                    <th>Итоговая стоимость</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="el : ${listCheck}">
+                    <td class="pl-5" th:text="${el.id}"></td>
+                    <div th:each="el1 : ${el.getOrder()}">
+                        <td th:text="${el1.getId()}"></td>
+                    </div>
+                    <td th:text="${el.dateOfRelease}"></td>
+                    <div th:each="el1 : ${el.getClient()}">
+                        <td th:text="${el1.getSurname()}  + ' ' + ${el1.getName()} + ' ' + ${el1.getMiddleName()}"></td>
+                    </div>
+                    <div th:each="el1 : ${el.getEmployee()}">
+                        <td th:text="${el1.getSurname()}  + ' ' + ${el1.getName()} + ' ' + ${el1.getMiddleName()}"></td>
+                    </div>
+                    <div th:each="el1 : ${el.getRegister()}">
+                        <td th:text="${el1.getId()}"></td>
+                    </div>
+                    <td th:text="${el.totalCost}"></td>
+                    <td style="width: 150px">
+                        <a th:href="'/check/details/' + ${el.getId()}" class="btn-small waves-effect waves-light blue">Подробнее</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function(){
+        $('.modal').modal();
+    });
+    $(document).ready(function(){
+        $('select').formSelect();
+    });
+</script>

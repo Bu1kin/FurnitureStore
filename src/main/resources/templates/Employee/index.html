@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Сотрудники</title>
+    <div th:insert="fragments/tailwindNavbar"></div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</head>
+<body class="bg-gradient-to-r from-white via-gray-50 to-yellow-50">
+    <form class="col s12" action="/employee/filter-direct" method="get">
+        <div class="input-field col s12 ml-5" style="margin-bottom: 0px;">
+            <i class="material-icons prefix">search</i>
+            <input type="text" name="searchName" placeholder="Фамилия сотрудника" style="min-width: 100px; width: 250px; margin-bottom: 0px;">
+            <input class="btn blue" type="submit" value="Найти" style="width: 80px; margin-left: 10px">
+
+            <a class="right btn waves-effect waves-light mr-5 orange accent-3 black-text modal-trigger" th:href="'/employee/stats'" style="margin-top: 7px;">Статистика</a>
+        </div>
+    </form>
+
+    <div class="cover-container p-5 flex-column">
+        <div style="background-color: #e7e7e0" class="rounded-xl shadow-xl">
+            <table class="highlight">
+                <thead>
+                <tr>
+                    <th class="pl-5" style="width: 70px">ID</th>
+                    <th>Email</th>
+                    <th>Фамилия</th>
+                    <th>Имя</th>
+                    <th>Отчество</th>
+                    <th>Номер телефона</th>
+                    <th>Должность</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="el : ${listEmployee}">
+                    <td class="pl-5" th:text="${el.id}"></td>
+                    <td th:text="${el.email}"></td>
+                    <td th:text="${el.surname}"></td>
+                    <td th:text="${el.name}"></td>
+                    <td th:text="${el.middleName}"></td>
+                    <td th:text="${el.phone}"></td>
+                    <td th:text="${el.getPost()}"></td>
+                    <td style="width: 150px">
+                        <a th:href="'/employee/details/' + ${el.getId()}" class="btn-small waves-effect waves-light blue">Подробнее</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function(){
+        $('.modal').modal();
+    });
+</script>

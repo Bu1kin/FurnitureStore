@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Поставщики</title>
+    <div th:insert="fragments/tailwindNavbar"></div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</head>
+<body class="h-screen bg-gradient-to-r from-white via-gray-50 to-yellow-50">
+
+    <form class="col s12" action="/supplier/filter-direct" method="get">
+        <div class="input-field col s12 ml-5" style="margin-bottom: 0px;">
+            <i class="material-icons prefix">search</i>
+            <input type="text" name="searchName" placeholder="Наименование поставщика" style="min-width: 100px; width: 250px; margin-bottom: 0px;">
+            <input class="btn blue" type="submit" value="Найти" style="width: 80px; margin-left: 10px">
+
+            <a class="right btn waves-effect waves-light mr-5 blue lighten-3 accent-3 white-text" href="/supplier/export" style="margin-top: 7px;">Экспорт</a>
+            <a class="right btn waves-effect waves-light mr-5 green accent-3 black-text modal-trigger" href="#modal1" style="margin-top: 7px;">Добавить поставщика</a>
+        </div>
+    </form>
+
+    <!-- Модальное окно добавления данных (materialize css) -->
+    <div id="modal1" class="modal modal-fixed-footer">
+        <div class="modal-content">
+            <p class="center" style="font-size: 32px">Добавление поставщика</p>
+            <div class="row">
+                <form th:object="${supplier}" th:action="'/supplier/add'" method="post">
+                    <div class=" input-field col s12">
+                        <input required id="nameSupplier" class="validate" type="text" name="NameSupplier">
+                        <label for="nameSupplier">Наименование поставщика</label>
+                    </div>
+
+                    <div class=" input-field col s12">
+                        <input required id="email" class="validate" type="email" name="Email">
+                        <label for="email">Эл. почта</label>
+                    </div>
+
+                    <div class=" input-field col s12">
+                        <input required id="address" class="validate" type="text" name="Address">
+                        <label for="address">Адрес</label>
+                    </div>
+
+                    <div class=" input-field col s12">
+                        <input required id="phone" class="validate" type="tel" name="Phone" minlength="1" pattern="[+][7][(][0-9][0-9][0-9][)][0-9][0-9][0-9][-][0-9][0-9][-][0-9][0-9]">
+                        <label for="phone">Номер телефона</label>
+                    </div>
+
+                    <input type="submit" value="Создать" class="waves-effect waves-green btn green accent-3 black-text"/>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <a class="modal-close waves-effect waves-green btn-flat">Закрыть</a>
+        </div>
+    </div>
+
+
+    <div class="cover-container p-5 flex-column">
+        <div style="background-color: #e7e7e0" class="rounded-xl shadow-xl">
+            <table class="highlight">
+                <thead>
+                    <tr>
+                        <th class="pl-5" style="width: 70px">ID</th>
+                        <th>Наименование поставщика</th>
+                        <th>Эл. почта</th>
+                        <th>Адрес</th>
+                        <th>Номер телефона</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="el : ${listSupplier}">
+                        <td class="pl-5" th:text="${el.id}"></td>
+                        <td th:text="${el.nameSupplier}"></td>
+                        <td th:text="${el.email}"></td>
+                        <td th:text="${el.address}"></td>
+                        <td th:text="${el.phone}"></td>
+                        <td style="width: 150px">
+                            <a th:href="'/supplier/details/' + ${el.getId()}" class="btn-small waves-effect waves-light blue">Подробнее</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+<!--    bgcolor="e1e1db"-->
+</body>
+</html>
+
+<script>
+    $(document).ready(function(){
+        $('.modal').modal();
+    });
+</script>
+

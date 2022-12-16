@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Поиск планов поставок</title>
+    <div th:insert="fragments/tailwindNavbar"></div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</head>
+<body>
+    <div class="row ml-5 mt-6 mb-0">
+        <a class="left btn waves-effect waves-light grey" th:href="'/plan'">Назад</a>
+    </div>
+
+    <div class="cover-container p-5 flex-column">
+        <div style="background-color: #e7e7e0" class="rounded-xl shadow-xl">
+            <table class="highlight">
+                <thead>
+                <tr>
+                    <th class="pl-5" style="width: 70px">ID</th>
+                    <th>Дата заключения</th>
+                    <th>Поставщик</th>
+                    <th>Сотрудник</th>
+                    <th>Товар</th>
+                    <th>Итоговая стоимость</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="el : ${plan}">
+                    <td class="pl-5" th:text="${el.id}"></td>
+                    <td th:text="${el.dateOfRegistration}"></td>
+                    <div th:each="el1 : ${el.getSupplier()}">
+                        <td th:text="${el1.getNameSupplier()}"></td>
+                    </div>
+                    <div th:each="el1 : ${el.getEmployee()}">
+                        <td th:text="${el1.getSurname()}  + ' ' + ${el1.getName()} + ' ' + ${el1.getMiddleName()}"></td>
+                    </div>
+                    <div th:each="el1 : ${el.getProduct()}">
+                        <td th:text="${el1.getNameProduct()}"></td>
+                    </div>
+                    <td th:text="${el.totalCost}"></td>
+                    <td style="width: 150px">
+                        <a th:href="'/plan/details/' + ${el.getId()}" class="btn-small waves-effect waves-light blue">Подробнее</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

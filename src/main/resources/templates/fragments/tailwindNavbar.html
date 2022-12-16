@@ -1,0 +1,23 @@
+<nav style="background: linear-gradient(to right, #c6d8e1, #eef2f3)" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <div class="nav-wrapper">
+    <ul class="left hide-on-med-and-down ml-5">
+      <li sec:authorize="hasAnyAuthority('Администратор')"><a class="text-black" href="/employee">Сотрудники</a></li>
+      <li sec:authorize="hasAnyAuthority('Закупщик', 'Кладовщик', 'Кассир', 'Нет')"><a class="text-black" href="/product">Товары</a></li>
+      <li sec:authorize="hasAnyAuthority('Закупщик', 'Кладовщик')"><a class="text-black" href="/plan">Планы закупок</a></li>
+      <li sec:authorize="hasAnyAuthority('Закупщик')"><a class="text-black" href="/supplier">Поставщики</a></li>
+      <li sec:authorize="hasAnyAuthority('Закупщик', 'Кладовщик')"><a class="text-black" href="/warehouse">Склады</a></li>
+      <li sec:authorize="hasAnyAuthority('Кассир', 'Логист', 'Курьер')"><a class="text-black" href="/order">Заказы</a></li>
+      <li sec:authorize="hasAnyAuthority('Кассир')"><a class="text-black" href="/check">Чеки</a></li>
+      <li sec:authorize="hasAnyAuthority('Кассир')"><a class="text-black" href="/client">Клиенты</a></li>
+      <li sec:authorize="hasAnyAuthority('Администратор', 'Кассир')"><a class="text-black" href="/register">Кассовые аппараты</a></li>
+      <li sec:authorize="hasAnyAuthority('Логист' ,'Курьер')"><a class="text-black" href="/route">Маршруты</a></li>
+      <li sec:authorize="hasAnyAuthority('Администратор')"><a class="red-text" href="/admin">Специальные возможности</a></li>
+    </ul>
+
+    <div>
+      <form class="right mr-5" th:action="@{/logout}" method="post" style="margin-bottom: 0px">
+        <input type="submit" class="btn red lighten-2 black-text" value="Выйти"/>
+      </form>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Подробности товара</title>
+    <div th:insert="fragments/tailwindNavbar"></div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</head>
+<body>
+    <div class="row m-5">
+        <form th:each="el: ${product}" th:action="'/product/edit/' + ${el.getId()}" method="post">
+            <div class=" input-field col s12">
+                <input th:value="${el.getId()}" disabled id="idDetails" type="email">
+                <label for="idDetails">ID</label>
+            </div>
+
+            <div class=" input-field col s12">
+                <input th:value="${el.getNameProduct()}" required id="nameProduct" class="validate" type="text" name="nameProduct">
+                <label for="nameProduct">Название товара</label>
+            </div>
+
+            <div class=" input-field col s12">
+                <input th:value="${el.getAmount()}" required id="amount" class="validate" type="number" name="amount">
+                <label for="amount">Количество</label>
+            </div>
+
+            <div class=" input-field col s12">
+                <input th:value="${el.getWeight()}" required id="weight" class="validate" type="number" name="weight">
+                <label for="weight">Вес</label>
+            </div>
+
+            <div class=" input-field col s12">
+                <input th:value="${el.getPrice()}" required id="price" class="validate" type="number" name="price">
+                <label for="price">Цена</label>
+            </div>
+
+            <div class=" input-field col s12">
+                <input th:value="${el.getDateOfProduction()}" required id="dateOfProduction" class="validate" type="text" name="dateOfProduction">
+                <label for="dateOfProduction">Дата производства</label>
+            </div>
+
+            <div class="input-field col s12">
+                <select id="select-supplier">
+                    <div th:each="el : ${listSupplier}">
+                        <option th:value="${el.id}" th:text="${el.getId()} + ' ' + ${el.getNameSupplier()}"></option>
+                    </div>
+                </select>
+                <label>Поставщик</label>
+            </div>
+
+            <div class="input-field col s12">
+                <select id="select-warehouse">
+                    <div th:each="el : ${listWarehouse}">
+                        <option th:value="${el.id}" th:text="${el.id} + ' ' + ${el.getAddress()}"></option>
+                    </div>
+                </select>
+                <label>Склад</label>
+            </div>
+
+<!--            <div class="input-field col s12">-->
+<!--                <select id="select-plan">-->
+<!--                    <div th:each="el : ${listPlan}">-->
+<!--                        <option th:text="${el.id}"></option>-->
+<!--                    </div>-->
+<!--                </select>-->
+<!--                <label>План закупок</label>-->
+<!--            </div>-->
+
+<!--            <div class="input-field col s12">-->
+<!--                <select id="select-order">-->
+<!--                    <div th:each="el : ${listOrder}">-->
+<!--                        <option th:text="${el.id}"></option>-->
+<!--                    </div>-->
+<!--                </select>-->
+<!--                <label>Заказ</label>-->
+<!--            </div>-->
+
+            <input type="submit" value="Изменить" class="waves-effect waves-green btn blue mb-3"/>
+            <a href="#modalConf" class="btn waves-effect waves-green red mb-3 modal-trigger">Удалить</a>
+            <a th:href="'/product'" class="btn waves-effect waves-light grey mb-3">Назад</a>
+
+            <input id="input-warehouse" name="warehouse" style="visibility: hidden; width: 1px; height: 1px">
+            <input id="input-supplier" name="supplier" style="visibility: hidden; width: 1px; height: 1px">
+
+
+            <div id="modalConf" class="modal modal-fixed-footer" style="width: 550px; height: 240px">
+                <div class="modal-content">
+                    <p class="center" style="font-size: 32px">Удаление товара</p>
+                    <p class="center" style="font-size: 21px">Пожалуйста, подтвердите удаление записи</p>
+                </div>
+                <div class="modal-footer">
+                    <a th:href="'/product/del/' + ${el.getId()}" class="waves-effect waves-green btn red">Подтвердить</a>
+                    <a class="modal-close waves-effect waves-green btn grey">Закрыть</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+<script>
+    $(document).ready(function(){
+        $('.modal').modal();
+    });
+    $(document).ready(function(){
+        $('select').formSelect();
+    });
+</script>
+
+<script>
+    var select_warehouse_ = document.getElementById("select-warehouse");
+    var input_warehouse_ = document.getElementById("input-warehouse");
+    var select_supplier_ = document.getElementById("select-supplier");
+    var input_supplier_ = document.getElementById("input-supplier");
+
+    var input_nameProduct_ = document.getElementById("nameProduct");
+    var input_amount_ = document.getElementById("amount");
+    var input_weight_ = document.getElementById("weight");
+    var input_price_ = document.getElementById("price");
+
+    select_supplier_.onchange = function (){
+        input_warehouse_.value = select_warehouse_.value[0];
+        input_supplier_.value = select_supplier_.value[0];
+    }
+
+    select_warehouse_.onchange = function (){
+        input_warehouse_.value = select_warehouse_.value[0];
+        input_supplier_.value = select_supplier_.value[0];
+    }
+
+    input_nameProduct_.onchange = function (){
+        input_warehouse_.value = select_warehouse_.value[0];
+        input_supplier_.value = select_supplier_.value[0];
+    }
+
+    input_amount_.onchange = function (){
+        input_warehouse_.value = select_warehouse_.value[0];
+        input_supplier_.value = select_supplier_.value[0];
+    }
+
+    input_weight_.onchange = function (){
+        input_warehouse_.value = select_warehouse_.value[0];
+        input_supplier_.value = select_supplier_.value[0];
+    }
+
+    input_price_.onchange = function (){
+        input_warehouse_.value = select_warehouse_.value[0];
+        input_supplier_.value = select_supplier_.value[0];
+    }
+</script>
