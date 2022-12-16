@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Товары</title>
@@ -17,7 +17,7 @@
             <input type="text" name="searchName" placeholder="Название товара" style="min-width: 100px; width: 250px; margin-bottom: 0px;">
             <input class="btn blue" type="submit" value="Найти" style="width: 80px; margin-left: 10px">
 
-            <a class="right btn waves-effect waves-light mr-5 green accent-3 black-text modal-trigger" href="#modal1" style="margin-top: 7px;">Добавить товар</a>
+            <a class="right btn waves-effect waves-light mr-5 green accent-3 black-text modal-trigger" sec:authorize="hasAnyAuthority('Закупщик', 'Кладовщик', 'Кассир')" href="#modal1" style="margin-top: 7px;">Добавить товар</a>
         </div>
     </form>
 
@@ -105,7 +105,7 @@
                         <td th:text="${el1.getAddress()}"></td>
                     </div>
                     <td style="width: 150px">
-                        <a th:href="'/product/details/' + ${el.getId()}" class="btn-small waves-effect waves-light blue">Подробнее</a>
+                        <a th:href="'/product/details/' + ${el.getId()}" class="btn-small waves-effect waves-light blue" sec:authorize="hasAnyAuthority('Закупщик', 'Кладовщик', 'Кассир')">Подробнее</a>
                     </td>
                 </tr>
                 </tbody>

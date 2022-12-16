@@ -81,9 +81,4 @@ public class EmployeeController {
         employeeRepo.save(employee);
         return("redirect:/employee");
     }
-
-    @GetMapping("/employee/stats")
-    public String getPie(Model model){
-        return ("Employee/stats");
-    }
 }
