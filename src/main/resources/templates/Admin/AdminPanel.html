@@ -20,10 +20,10 @@
 
                 <div class="card-content row s12">
                     <div class="flex-col mb-4">
-                        <a th:href="'/backup'" class="btn waves-effect waves-light green accent-4">Создать копию базы данных</a>
+                        <a id="backup" class="btn waves-effect waves-light green accent-4">Создать копию базы данных</a>
                     </div>
                     <div class="flex-col cover-container">
-                        <a th:href="'/restore'" class="btn waves-effect waves-light blue">Восстановить базу данных</a>
+                        <a id="restore" class="btn waves-effect waves-light blue">Восстановить базу данных</a>
                     </div>
 
                 </div>
@@ -32,3 +32,19 @@
     </div>
 </body>
 </html>
+
+<script>
+    document.getElementById('restore').addEventListener('click', function () {
+
+        $.get('/restore', {dbName: 'UPtest'}, function(data){
+            alert(data);
+        });
+    });
+
+    document.getElementById('backup').addEventListener('click', function () {
+
+        $.get('/backup', {dbName: 'UPtest'}, function(data){
+            alert(data);
+        });
+    });
+</script>

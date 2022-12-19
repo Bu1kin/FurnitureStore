@@ -26,7 +26,8 @@ public class AdminController {
 
             String savePath = folderPath + "backup.sql";
 
-            String executeCmd = "mysqldump --port=3300 --column-statistics=0 -uroot " + dbName + " -r " + savePath;
+            //String executeCmd = "mysqldump --port=3306 --column-statistics=0 -uroot " + dbName + " -r " + savePath;
+            String executeCmd = "mysqldump --column-statistics=0 -uroot " + dbName + " -r " + savePath;
 
             Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
             int processComplete = runtimeProcess.waitFor();
@@ -50,7 +51,8 @@ public class AdminController {
     public String restore(String dbName){
         try {
 
-            String executeCmd = "cmd.exe /c mysql --port=3300 -uroot " + dbName + " < " + System.getProperty("user.dir") + "\\backup\\backup.sql";
+            //String executeCmd = "cmd.exe /c mysql --port=3306 -uroot " + dbName + " < " + System.getProperty("user.dir") + "\\backup\\backup.sql";
+            String executeCmd = "cmd.exe /c mysql -uroot " + dbName + " < " + System.getProperty("user.dir") + "\\backup\\backup.sql";
             Process runtimeProcess = Runtime.getRuntime().exec(executeCmd);
             int processComplete = runtimeProcess.waitFor();
 
